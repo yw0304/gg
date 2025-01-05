@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>미로 탈출 게임</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+    }
+    #maze {
+      display: grid;
+      grid-template-columns: repeat(5, 50px);
+      gap: 2px;
+    }
+    .tile {
+      width: 50px;
+      height: 50px;
+      background-color: #ccc;
+      text-align: center;
+      line-height: 50px;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+    .wall {
+      background-color: #333;
+    }
+    #player {
+      background-color: red;
+      color: white;
+    }
+    #exit {
+      background-color: green;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="maze">
+    <div class="tile wall"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile wall"></div>
+    <div class="tile"></div>
+    <div class="tile" id="exit">출구</div>
+    <div class="tile" id="player">🚶</div>
+    <div class="tile"></div>
+    <div class="tile"></div>
+    <div class="tile wall"></div>
+    <div class="tile"></div>
+  </div>
+
+  <script>
+    const player = document.getElementById("player");
+    const exit = document.getElementById("exit");
+    let playerPosition = 10; // 시작 위치 (11번째 타일)
+
+    document.addEventListener("keydown", (e) => {
+      const maze = document.getElementById("maze").children;
+
+      switch (e.key) {
+        case "ArrowUp":
+          movePlayer(-5);
+          break;
+        case "ArrowDown":
+          movePlayer(5);
+          break;
+        case "ArrowLeft":
+          movePlayer(-1);
+          break;
+        case "ArrowRight":
+          movePlayer(1);
+          break;
+      }
+
+      if (playerPosition === Array.from(maze).indexOf(exit)) {
+        alert("🎉 축하합니다! 미로를 탈출했습니다!");
+        resetGame();
+      }
+    });
+
+    function movePlayer(step) {
+      const maze = document.getElementById("maze").children;
+      const nextPosition = playerPosition + step;
+
+      // 이동 가능한 타일인지 체크
+      if (maze[nextPosition] && !maze[nextPosition].classList.contains("wall")) {
+        maze[playerPosition].innerHTML = "";
+        maze[nextPosition].innerHTML = "🚶";
+        playerPosition = nextPosition;
+      }
+    }
+
+    function resetGame() {
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
